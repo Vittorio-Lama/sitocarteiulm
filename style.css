@@ -1,8 +1,48 @@
+/* RESET BASE */
 body {
     margin: 0;
     font-family: Georgia, serif;
     background-color: #f4a300;
     color: #111;
+}
+
+/* NAVBAR */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: black;
+    color: white;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 15px 40px;
+    z-index: 1000;
+    box-sizing: border-box;
+}
+
+/* LOGO + LINKS */
+.logo {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    color: #f4a300;
 }
 
 /* SEZIONI GENERICHE */
@@ -79,6 +119,21 @@ body {
     font-size: 36px;
 }
 
+/* GALLERY */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 40px;
+}
+
+.sketchfab-embed-wrapper iframe {
+    width: 100%;
+    height: 300px;
+    border: none;
+    border-radius: 10px;
+}
+
 /* RESPONSIVE */
 @media(max-width: 900px) {
     .section, .team {
@@ -89,57 +144,191 @@ body {
     .text, .image, .team img, .team-text {
         width: 100%;
     }
+
+    .navbar {
+        flex-direction: column;
+        gap: 10px;
+    }
 }
 
-/* NAVBAR */
-.navbar {
-    position: fixed;
-    top: 0;
+/* HERO SECTION */
+.hero {
+    height: 70vh; /* prima era 100vh */
+    min-height: 400px; /* evita che diventi troppo piccola */
+
     width: 100%;
+    background: url("img/WhatsApp Image 2026-03-30 at 14.20.10.jpeg") center/cover no-repeat;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    box-sizing: border-box;
+}
+
+/* BLOCCO GIALLO CENTRALE */
+.hero-content {
+    background: #f4a300;
+    color: black;
+    text-align: center;
+
+    max-width: 900px;
+    padding: 60px 50px;
+
+    border-radius: 6px;
+}
+
+/* TITOLO */
+.hero h1 {
+    font-size: 30px;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+/* TESTO */
+.hero p {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* RESPONSIVE */
+@media(max-width: 900px) {
+    .hero-content {
+        padding: 40px 25px;
+    }
+
+    .hero h1 {
+        font-size: 36px;
+    }
+
+    .hero p {
+        font-size: 16px;
+    }
+}
+
+.card-item {
+    padding-top: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* SECTION WRAPPER */
+.slider-section {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 60px;
+    box-sizing: border-box;
+}
+
+/* CARD */
+.slider-card {
+    display: flex;
+    width: 100%;
+    max-width: 1100px;
+    height: 450px;
+
+    background: #fff;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+/* TESTO LATO SINISTRO */
+.slider-text {
+    width: 40%;
+    padding: 40px;
+    background: #f4a300;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.slider-text2 {
+    width: 70%;
+    padding: 40px;
+    background: #f4a300;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.slider-text h2 {
+    font-size: 32px;
+    margin-bottom: 15px;
+}
+
+.slider-text p {
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+/* IMMAGINI LATO DESTRO */
+.slider-image-container {
+    width: 60%;
+    overflow: hidden;
+    position: relative;
+}
+
+/* TRACK */
+.slider-track {
+    display: flex;
+    height: 100%;
+    transition: transform 0.5s ease;
+}
+
+/* IMMAGINI */
+.slider-track img {
+    min-width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* FRECCE */
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
     background: black;
     color: white;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 15px 40px;
-    z-index: 1000;
-}
-
-.logo {
-    font-weight: bold;
-    font-size: 18px;
-}
-
-.nav-links {
-    list-style: none;
-    display: flex;
-    gap: 30px;
-}
-
-.nav-links a {
-    color: white;
-    text-decoration: none;
-    transition: 0.3s;
-}
-
-.nav-links a:hover {
-    color: #f4a300;
-}
-
-/* spazio per navbar */
-body {
-    margin-top: 80px;
-}
-.gallery {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 per riga */
-    gap: 20px;
-    padding: 40px;
-}
-
-.sketchfab-embed-wrapper iframe {
-    width: 100%;
-    height: 300px;
     border: none;
-    border-radius: 10px;
+    padding: 15px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.arrow.left {
+    left: 10px;
+}
+
+.arrow.right {
+    right: 10px;
+}
+
+/* RESPONSIVE */
+@media(max-width: 900px) {
+    .slider-card {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .slider-text,
+    .slider-image-container {
+        width: 100%;
+        height: 300px;
+    }
+
+    .slider-text {
+        height: auto;
+        padding: 30px;
+    }
 }

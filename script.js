@@ -13,9 +13,28 @@ window.addEventListener("scroll", () => {
     });
 });
 
-// stato iniziale
-sections.forEach(sec => {
-    sec.style.opacity = 0;
-    sec.style.transform = "translateY(50px)";
-    sec.style.transition = "0.6s ease";
+document.querySelectorAll('.slider-section').forEach(section => {
+    
+    const track = section.querySelector('.slider-track');
+    const images = section.querySelectorAll('.slider-track img');
+
+    const next = section.querySelector('.arrow.right');
+    const prev = section.querySelector('.arrow.left');
+
+    let index = 0;
+
+    function updateSlider() {
+        track.style.transform = `translateX(-${index * 100}%)`;
+    }
+
+    next.addEventListener('click', () => {
+        index = (index + 1) % images.length;
+        updateSlider();
+    });
+
+    prev.addEventListener('click', () => {
+        index = (index - 1 + images.length) % images.length;
+        updateSlider();
+    });
+
 });
