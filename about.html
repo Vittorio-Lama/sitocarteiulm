@@ -1,15 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Card Museum</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Card Museum - Games</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+/* SPAZIO PER NAVBAR */
+.games-wrapper {
+    margin-top: 120px;
+}
+
+/* SEZIONI GIOCHI */
+.game-section {
+    min-height: 100vh;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+/* BOX */
+.game-box {
+    margin: 20px auto;
+    max-width: 600px;
+    padding: 25px;
+    background: rgba(0,0,0,0.4);
+    border-radius: 20px;
+}
+
+/* TITOLI */
+.game-title {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+/* CARTE */
+.card {
+    width: 70px;
+    height: 100px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5px;
+    border-radius: 10px;
+    background: white;
+    color: black;
+    font-weight: bold;
+}
+
+/* MEMORY GRID */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 70px);
+    gap: 10px;
+    justify-content: center;
+}
+
+/* BOTTONI */
+button {
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+</style>
 </head>
 
 <body>
 
-    <nav class="navbar">
+<!-- NAVBAR ORIGINALE -->
+<nav class="navbar">
     <div class="logo">Card Museum</div>
 
     <ul class="nav-links">
@@ -20,8 +82,220 @@
     </ul>
 </nav>
 
+<div class="games-wrapper">
 
+<!-- ================= MEMORY ================= -->
+<section class="game-section">
+    <h1 class="game-title">Memory</h1>
 
-<script src="script.js"></script>
+    <div class="game-box">
+        <div class="grid" id="memory-grid"></div>
+        <p id="memory-moves">Moves: 0</p>
+        <button onclick="startMemory()">Restart</button>
+    </div>
+</section>
+
+<!-- ================= WAR ================= -->
+<section class="game-section">
+    <h1 class="game-title">High Card</h1>
+
+    <div class="game-box">
+        <div>
+            <div>Your card</div>
+            <div id="player-card" class="card">?</div>
+        </div>
+
+        <div>
+            <div>Computer</div>
+            <div id="cpu-card" class="card">?</div>
+        </div>
+
+        <button onclick="playWar()">Draw</button>
+        <p id="war-result"></p>
+    </div>
+</section>
+
+<!-- ================= BLACKJACK ================= -->
+<section class="game-section">
+    <h1 class="game-title">Blackjack</h1>
+
+    <div class="game-box">
+
+        <div>
+            <h3>Player</h3>
+            <div id="player-cards"></div>
+            <p>Score: <span id="player-score">0</span></p>
+        </div>
+
+        <div>
+            <h3>Dealer</h3>
+            <div id="dealer-cards"></div>
+            <p>Score: <span id="dealer-score">0</span></p>
+        </div>
+
+        <button onclick="hit()">Hit</button>
+        <button onclick="stand()">Stand</button>
+        <button onclick="startBlackjack()">New Game</button>
+
+        <p id="bj-result"></p>
+
+    </div>
+</section>
+
+</div>
+
+<script>
+
+/* ================= MEMORY ================= */
+const symbols = ['♠️','♥️','♦️','♣️','♠️','♥️','♦️','♣️'];
+let mFirst, mSecond, mLock, mMoves;
+
+function startMemory() {
+    const grid = document.getElementById('memory-grid');
+    grid.innerHTML = '';
+    mMoves = 0;
+    mFirst = null;
+    mSecond = null;
+    mLock = false;
+
+    document.getElementById('memory-moves').textContent = 'Moves: 0';
+
+    const shuffled = [...symbols].sort(() => 0.5 - Math.random());
+
+    shuffled.forEach(s => {
+        const div = document.createElement('div');
+        div.className = 'card';
+        div.onclick = () => flipMemory(div, s);
+        grid.appendChild(div);
+    });
+}
+
+function flipMemory(card, symbol) {
+    if (mLock || card.textContent) return;
+
+    card.textContent = symbol;
+
+    if (!mFirst) {
+        mFirst = card;
+        return;
+    }
+
+    mSecond = card;
+    mLock = true;
+    mMoves++;
+    document.getElementById('memory-moves').textContent = 'Moves: ' + mMoves;
+
+    if (mFirst.textContent === mSecond.textContent) {
+        mFirst = mSecond = null;
+        mLock = false;
+    } else {
+        setTimeout(() => {
+            mFirst.textContent = '';
+            mSecond.textContent = '';
+            mFirst = mSecond = null;
+            mLock = false;
+        }, 600);
+    }
+}
+
+startMemory();
+
+/* ================= WAR ================= */
+const values = [2,3,4,5,6,7,8,9,10,'J','Q','K','A'];
+
+function val(v){
+    return {J:11,Q:12,K:13,A:14}[v] || v;
+}
+
+function playWar(){
+    const p = values[Math.floor(Math.random()*values.length)];
+    const c = values[Math.floor(Math.random()*values.length)];
+
+    document.getElementById('player-card').textContent = p;
+    document.getElementById('cpu-card').textContent = c;
+
+    let res = '';
+
+    if(val(p)>val(c)) res='You win';
+    else if(val(p)<val(c)) res='You lose';
+    else res='Draw';
+
+    document.getElementById('war-result').textContent = res;
+}
+
+/* ================= BLACKJACK ================= */
+let player = [];
+let dealer = [];
+let gameOver = false;
+
+function draw() {
+    return [2,3,4,5,6,7,8,9,10,10,10,10,11][Math.floor(Math.random()*13)];
+}
+
+function score(cards){
+    let s = cards.reduce((a,b)=>a+b,0);
+    while(s>21 && cards.includes(11)){
+        cards[cards.indexOf(11)] = 1;
+        s = cards.reduce((a,b)=>a+b,0);
+    }
+    return s;
+}
+
+function renderBJ(){
+    document.getElementById('player-cards').innerHTML =
+        player.map(c => `<div class="card">${c}</div>`).join('');
+
+    document.getElementById('dealer-cards').innerHTML =
+        dealer.map(c => `<div class="card">${c}</div>`).join('');
+
+    document.getElementById('player-score').textContent = score(player);
+    document.getElementById('dealer-score').textContent = score(dealer);
+}
+
+function startBlackjack(){
+    player = [draw(), draw()];
+    dealer = [draw()];
+    gameOver = false;
+    document.getElementById('bj-result').textContent = '';
+    renderBJ();
+}
+
+function hit(){
+    if(gameOver) return;
+
+    player.push(draw());
+    renderBJ();
+
+    if(score(player)>21){
+        document.getElementById('bj-result').textContent = 'BUST! You lose';
+        gameOver = true;
+    }
+}
+
+function stand(){
+    if(gameOver) return;
+
+    while(score(dealer)<17){
+        dealer.push(draw());
+    }
+
+    const p = score(player);
+    const d = score(dealer);
+
+    let res='';
+    if(d>21 || p>d) res='You win';
+    else if(p<d) res='You lose';
+    else res='Draw';
+
+    document.getElementById('bj-result').textContent = res;
+    gameOver = true;
+
+    renderBJ();
+}
+
+startBlackjack();
+
+</script>
+
 </body>
 </html>
